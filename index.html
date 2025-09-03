@@ -1,0 +1,1317 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Faiq Sohail Khan Portfolio</title>
+  <link href="https://fonts.googleapis.com/css2?family=SF+Pro+Display:wght@300;400;600;700&display=swap" rel="stylesheet">
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <style>
+    /* ---------------- Body & Background ---------------- */
+    body {
+      padding: 50px;
+      margin: 0;
+      font-family: "Inter", sans-serif;
+      background: linear-gradient(135deg, #111111, #1a1a1a);
+      color: #fff;
+      overflow-x: hidden;
+      position: relative;
+    }
+
+    /* Colorful gradient blobs for background */
+    .bg-blobs {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: -2;
+      overflow: hidden;
+      pointer-events: none;
+    }
+    
+    .blob {
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(60px);
+      opacity: 0.2;
+      animation: float 5s infinite ease-in-out;
+    }
+    
+    .blob:nth-child(1) {
+      background: linear-gradient(135deg, #ff0080, #ff8a00);
+      width: 500px;
+      height: 500px;
+      top: -200px;
+      left: -100px;
+      animation-delay: 0s;
+    }
+    
+    .blob:nth-child(2) {
+      background: linear-gradient(135deg, #00c4cc, #0066ff);
+      width: 600px;
+      height: 600px;
+      bottom: -250px;
+      right: -150px;
+      animation-delay: -5s;
+    }
+    
+    .blob:nth-child(3) {
+      background: linear-gradient(135deg, #6e00ff, #b300ff);
+      width: 450px;
+      height: 450px;
+      bottom: 100px;
+      left: 200px;
+      animation-delay: -10s;
+    }
+    
+    @keyframes float {
+      0%, 100% {
+        transform: translate(0, 0) scale(1);
+      }
+      33% {
+        transform: translate(30px, -40px) scale(1.05);
+      }
+      66% {
+        transform: translate(-20px, 30px) scale(0.95);
+      }
+    }
+
+    /* Base overlay for expanded cards */
+    .overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.4);
+      z-index: 10;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.4s ease;
+    }
+    .overlay::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      backdrop-filter: blur(10px);
+      z-index: -1;
+    }
+    .overlay.active { opacity: 0; pointer-events: auto; }
+
+    /* ---------------- Container & Cards ---------------- */
+    .container {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      grid-auto-rows: 80px 400px 400px;
+      gap: 10px;
+      perspective: 1500px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .card {
+      border-radius: 25px;
+      padding: 30px;
+      position: relative;
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      backdrop-filter: blur(20px);
+      box-shadow: 0 4px 20px rgba(0,0,0,0.4);
+      transition: all 0.4s ease;
+      transform-style: preserve-3d;
+      overflow: hidden;
+    }
+
+    /* Card hover effect - elevation with white edges */
+    .card:hover {
+      transform: translateY(-5px) scale(1.01);
+      box-shadow: 0 12px 30px rgba(0,0,0,0.6), 
+                  0 0 0 2px rgba(255, 255, 255, 0.8);
+      border-color: rgba(255, 255, 255, 0.5);
+    }
+
+    .card.expanded {
+  position: fixed;
+  top: 10%;
+  left: 25%;
+  right: 25%; 
+  bottom: 25%;
+  transform: translate(-50%, -50%) scale(1.05);
+  width: 70%;
+  max-width: 800px;
+  height: 70%;
+  max-height: 600px;
+  z-index: 20;
+  box-shadow: 0 0 30px rgba(255,255,255,0.3), 
+              0 0 60px rgba(255,255,255,0.2);
+  border: 1px solid rgba(255,255,255,0.5);
+}
+
+    /* ---------------- Navbar ---------------- */
+    .navbar {
+      grid-column: span 4;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-weight: 700;
+      font-size: 1.2rem;
+    }
+    .navbar .left { font-size: 1.4rem; }
+    .navbar .right a {
+      margin-left: 20px;
+      cursor: pointer;
+      transition: all 0.3s;
+      position: relative;
+    }
+    .navbar .right a::after {
+      content: '';
+      position: absolute;
+      bottom: -5px;
+      left: 0;
+      width: 0;
+      height: 2px;
+      background: rgba(255, 255, 255, 0.8);
+      transition: width 0.3s ease;
+    }
+    .navbar .right a:hover::after {
+      width: 100%;
+    }
+
+    /* ---------------- Headline ---------------- */
+    .headline {
+      grid-column: span 2;
+      font-size: 2rem;
+      font-weight: 700;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+    .headline .label {
+      font-size: 1.1rem;
+      font-weight: 500;
+      padding: 5px 8px;
+      opacity: 0.8;
+      align-self: flex-start;
+    }
+    .headline .icon {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      width: 130px;
+      height: 130px;
+      stroke-width: 1.5;
+      animation: pulse 3s infinite alternate;
+      filter: drop-shadow(0 0 6px rgba(255, 255, 255, 0.5));
+    }
+    @keyframes pulse {
+      from { transform: scale(1) rotate(0deg); filter: drop-shadow(0 0 8px rgba(255, 255, 255, 0.4)); }
+      to { transform: scale(1.1) rotate(10deg); filter: drop-shadow(0 0 15px rgba(255, 255, 255, 0.6)); }
+    }
+    .bottom-text {
+  font-weight: 10; /* thin default */
+  color: #ddd;
+  font-size: 30px;
+  line-height: 1.6;
+}
+
+.bottom-text .highlight {
+  font-weight: 700; /* bold */
+  font-style: italic;  
+  font-size: 40px;
+  background: linear-gradient(135deg, #ff6600, #ff0099);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent; 
+}
+
+
+    /* ---------------- Photo ---------------- */
+    .photo { 
+      grid-column: span 1; 
+		padding: 20px;
+      background: url('faiq.png') center/cover no-repeat; 
+      border-radius: 25px;
+    }
+
+    /* ---------------- Projects ---------------- */
+    .projects {
+      grid-column: span 1;
+      grid-row: span 2;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      justify-content: flex-start;
+      overflow-y: auto;
+max-height: 1000px;   /* adjust to your layout */
+  padding-right: 10px; 
+    }
+    .projects h2 { font-weight: 700; margin-bottom: 30px; font-size: 2.0rem; }
+    .projects p { 
+      margin: 25px 0; 
+      font-weight: 400; 
+      cursor: pointer;
+      transition: all 0.3s;
+      position: relative;
+      padding-left: 0;
+      transition: padding-left 0.3s ease;
+    }
+    .projects p:hover {
+      padding-left: 10px;
+    }
+    .projects hr { width: 100%; border: none; border-top: 1px solid rgba(255,255,255,0.2); }
+    .project-collage {
+  width: 100%;
+  margin-top: 20px;
+  border-radius: 15px;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.4);
+  background: linear-gradient(45deg, #2a2a2a, #3a3a3a);
+
+  /* remove fixed height */
+  height: auto;
+
+  /* make container shrink/grow to image */
+  display: inline-block;  
+  overflow: hidden;
+}
+
+.project-collage img {
+  width: 100%;       /* scale to container width */
+  height: auto;      /* maintain aspect ratio */
+  display: block;    /* remove inline whitespace gap */
+  border-radius: 15px;
+}
+
+.project-collage iframe {
+  width: 100%;
+  max-height: 200px;   /* keep video manageable */
+  border-radius: 15px;
+}
+
+    .row3 { grid-column: span 3; display: flex; gap: 20px; }
+    .row3 .card { flex: 1; }
+
+    /* About card */
+    .about .label { position: absolute; top: 20px; left: 20px; font-weight: 600; font-size: 1.6rem; }
+    .about .desc { position: absolute; bottom: 20px; left: 20px; color: #ddd; font-size: 0.9rem; line-height: 1.6; max-width: 85%; }
+
+    /* Contact card */
+    .contact .label { position: absolute; top: 20px; left: 20px; font-size: 0.7rem; font-weight: 100; opacity: 0.8; }
+    .contact .bottom { position: absolute; bottom: 20px; left: 20px; font-weight: 700; font-size: 1.8rem; }
+
+    /* ✨ Form Styles */
+    .contact form {
+      position: absolute;
+      top: 60px;
+      left: 20px;
+      right: 20px;
+      bottom: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+      padding-bottom: 60px; /* space for button */
+    }
+    .contact input, 
+    .contact textarea {
+      width: 90%;
+      padding: 12px 15px;
+      border-radius: 12px;
+      border: 1px solid rgba(255,255,255,0.2);
+      background: rgba(255,255,255,0.05);
+      color: #fff;
+      font-size: 1rem;
+      backdrop-filter: blur(8px);
+      transition: all 0.3s ease;
+    }
+    .contact input::placeholder,
+    .contact textarea::placeholder { color: rgba(255,255,255,0.5); }
+    .contact input:focus, 
+    .contact textarea:focus {
+      outline: none;
+      border: 1px solid rgba(255, 255, 255, 0.6);
+      box-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
+      background: rgba(255,255,255,0.08);
+    }
+
+    /* Submit button gradient + hover */
+    .contact button {
+      position: absolute;
+      bottom: 50px;
+      right: 30px;
+      padding: 9px 25px;
+      border: none;
+      border-radius: 25px;
+      background: linear-gradient(135deg, #ff6600, #ff0099);
+      color: #fff;
+      font-weight: 700;
+      cursor: pointer;
+      font-size: 0.9rem;
+      letter-spacing: 1px;
+      transition: all 0.4s ease;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+    }
+    .contact button:hover {
+      transform: translateY(-2px) scale(1.05);
+      box-shadow: 0 6px 18px rgba(255,0,150,0.6);
+    }
+    .contact button:active { transform: translateY(0); }
+
+    /* Socials */
+    .socials {
+      position: absolute;
+      bottom: 20px;
+      right: 300px;
+      display: flex;
+      flex-direction: row;
+      gap: 20px;
+    }
+    .socials a {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.1);
+      transition: all 0.3s ease;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+    }
+    .socials a:hover {
+      transform: translateY(-5px) scale(1.1);
+      background: rgba(255, 165, 0, 1);
+      box-shadow: 0 5px 15px rgba(255, 255, 255, 0.1);
+    }
+    .socials svg {
+      width: 22px;
+      height: 22px;
+      fill: none;
+      stroke: white;
+      stroke-width: 1.5;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+/* ---------------- ✨ Animation Additions ✨ ---------------- */
+.card { opacity: 0; transform: translateY(20px); } /* start hidden */
+.card.photo { 
+  opacity: 0; 
+  transform: scale(0.8); 
+  position: relative;
+  overflow: hidden;
+}
+
+/* ripple circle */
+.card.photo::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.25);
+  transform: translate(-50%, -50%);
+  opacity: 0;
+  pointer-events: none;
+}
+.card.photo.ripple-active::after {
+  animation: ripple 1s ease;
+}
+
+@keyframes zoomIn {
+  from { transform: scale(0.8); opacity: 0; }
+  to   { transform: scale(1); opacity: 1; }
+}
+@keyframes ripple {
+  0% { width: 0; height: 0; opacity: 0.6; }
+  100% { width: 400px; height: 400px; opacity: 0; }
+}
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(30px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* Project Detail Modal */
+body.modal-open {
+  overflow: hidden;
+}
+.project-modal {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) scale(0.9);
+  width: 80%;
+  max-width: 900px;
+  max-height: 80vh;
+  background: rgba(30, 30, 30, 0.95);
+  backdrop-filter: blur(20px);
+  border-radius: 25px;
+  padding: 30px;
+  z-index: 30;
+  opacity: 0;
+  pointer-events: none;
+  transition: all 0.4s ease;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: auto; /* smooth scroll on mobile */
+  box-shadow: 0 0 40px rgba(255, 255, 255, 0.2);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+.project-modal.active {
+  opacity: 1;
+  pointer-events: auto;
+  transform: translate(-50%, -50%) scale(1);
+}
+
+.project-modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  padding-bottom: 15px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.project-modal-title {
+  font-size: 2rem;
+  font-weight: 700;
+  margin: 0;
+}
+
+.project-modal-close {
+  background: none;
+  border: none;
+  color: white;
+  font-size: 1.5rem;
+  cursor: pointer;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+}
+
+.project-modal-close:hover {
+  background: rgba(255, 255, 255, 0.1);
+  transform: rotate(90deg);
+}
+
+.project-modal-content {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 30px;
+}
+
+.project-modal-image {
+  width: 100%;
+  border-radius: 15px;
+  overflow: hidden;
+}
+
+.project-modal-image img {
+  width: 100%;
+  height: auto;
+  border-radius: 15px;
+}
+
+.project-modal-details {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.project-modal-description {
+  line-height: 1.6;
+  color: #ddd;
+}
+
+.project-modal-features {
+  list-style-type: none;
+  padding: 0;
+}
+
+.project-modal-features li {
+  margin-bottom: 10px;
+  padding-left: 25px;
+  position: relative;
+}
+
+.project-modal-features li:before {
+  content: "•";
+  position: absolute;
+  left: 0;
+  color: #ff6600;
+  font-size: 1.2rem;
+}
+
+.project-modal-tags {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.project-modal-link {
+  display: inline-block;
+  padding: 10px 20px;
+  background: linear-gradient(135deg, #ff6600, #ff0099);
+  color: white;
+  text-decoration: none;
+  border-radius: 25px;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  margin-top: 10px;
+}
+
+.project-modal-link:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 5px 15px rgba(255, 102, 0, 0.4);
+}
+
+/* Mobile adjustments */
+@media (max-width: 768px) {
+  .project-modal {
+    width: 90%;
+    max-width: none;
+    max-height: 90vh;
+    padding: 20px;
+    border-radius: 15px;
+    overflow-y: auto; 
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .project-modal-header {
+    margin-bottom: 12px;
+    padding-bottom: 8px;
+  }
+
+  .project-modal-title {
+    font-size: 1.3rem;
+  }
+
+  .project-modal-close {
+    font-size: 1rem;
+    width: auto;
+    height: auto;
+  }
+
+  .project-modal-content {
+    grid-template-columns: 1fr; /* stack image + details */
+    gap: 8px; /* ✅ reduced spacing under image */
+  }
+
+  .project-modal-image {
+    max-height: 220px; /* ✅ keeps image from dominating */
+    overflow: hidden;
+    margin-bottom: 0; /* ✅ no extra space below */
+    display: block;
+  }
+
+  .project-modal-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* ✅ nicely crops without stretching */
+    border-radius: 12px;
+    display: block; /* removes inline gap */
+  }
+
+  .project-modal-details {
+    gap: 6px; /* tighter spacing */
+  }
+
+  .project-modal-description {
+    font-size: 0.85rem;
+    line-height: 1.5;
+  }
+
+  .project-modal-features li {
+    font-size: 0.8rem;
+    margin-bottom: 4px;
+  }
+
+  .project-modal-link {
+    width: 90%;
+    text-align: center;
+    padding: 12px;
+    font-size: 0.95rem;
+    border-radius: 20px;
+  }
+}
+    /* Responsive design */
+    @media (max-width: 1024px) {
+
+      .container { grid-template-columns: repeat(2, 1fr); grid-auto-rows: auto; }
+      .navbar { grid-column: span 2; }
+      .headline { grid-column: span 2; font-size: 1.6rem; }
+      .row3 { grid-column: span 2; flex-direction: column; }
+      .photo { grid-column: span 1; min-height: 300px; }
+      .projects { grid-column: span 1; }
+    }
+
+/* Mobile fixes - FINAL VERSION */
+@media (max-width: 600px) {
+  body { 
+    padding: 8px;
+    font-size: 14px;
+  }
+  /* Disable animations on mobile */
+  .card,
+  .card.photo {
+    opacity: 1 !important;
+    transform: none !important;
+    animation: none !important;
+  }
+
+  .card.photo::after {
+    display: none !important;
+  }
+
+  /* Force all cards in column */
+  .container { 
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .card, 
+  .photo, 
+  .projects, 
+  .row3, 
+  .about, 
+  .contact, 
+  .row4.certificates {
+    grid-column: unset !important;
+    width: 100% !important;
+    max-width: 100% !important;
+  }
+
+  /* Navbar adjustments */
+  .navbar { 
+    flex-direction: column;
+    padding: 15px;
+    min-height: 40px;
+  }
+  
+  .navbar .left { 
+    margin-top: 8px;
+    font-size: 1.3rem;
+  }
+  
+  .navbar .right { 
+    display: none;
+  }
+
+  /* Headline adjustments */
+  .headline { 
+    grid-column: span 1;
+    font-size: 0.8rem;
+    padding: 15px;
+    min-height: 120px;
+  }
+  
+  .headline .label {
+    font-size: 0.7rem;
+    padding: 4px 6px;
+  }
+  
+  .headline .icon {
+    display: none;
+  }
+  
+  .bottom-text {
+    font-weight: 400;
+    color: #ddd;
+    font-size: 12px;
+    line-height: 1.2;
+  }
+
+  .bottom-text .highlight {
+    font-weight: 700;
+    font-style: italic;
+    font-size: 22px;
+    background: linear-gradient(135deg, #ff6600, #ff0099);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+
+	.photo { grid-column: span 1; flex-direction: column; height: auto; }
+	
+  /* Project card adjustments */
+  .projects {
+    flex-direction: column;
+    height: auto;
+    padding: 15px;
+  }
+  
+  .projects h2 { 
+    font-size: 1.2rem;
+    margin-bottom: 25px;
+  }
+  
+  .projects p { 
+    margin: 12px 0;
+    font-size: 0.90rem;
+  }
+
+  .row3 { 
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  /* About card adjustments */
+  .about {
+    min-height: 260px;
+    padding: 15px;
+    position: relative;
+  }
+  
+  .about .label {
+    font-size: 1.2rem;
+    margin-bottom: 8px;
+  }
+  
+  .about .desc {
+    font-size: 0.8rem;
+    line-height: 1.4;
+  }
+
+  /* Contact card adjustments */
+  .contact { 
+    min-height: 260px;
+    padding: 15px;
+    position: relative;
+  }
+
+  .contact .label,
+  .contact .bottom {
+    display: none;
+  }
+
+  .contact form {
+    position: static;
+    gap: 10px;
+    padding-bottom: 50px;
+  }
+  
+  .contact input, 
+  .contact textarea {
+    padding: 8px 10px;
+    font-size: 0.9rem;
+    border-radius: 8px;
+  }
+  
+  .contact form button {
+    position: static;
+    width: 35%;
+    margin-top: 8px;
+    padding: 7px 15px;
+    font-size: 0.85rem;
+  }
+
+  /* Social icons */
+  .socials {
+    position: absolute;
+    bottom: 12px;
+    right: 12px;
+    display: flex;
+    flex-direction: row;
+    gap: 15px;
+  }
+  
+  .socials a {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.1);
+    transition: all 0.3s ease;
+  }
+  
+  .socials a i {
+    width: 40px;
+    height: 40px;
+  }
+  
+  .socials a:hover {
+    background: rgba(255, 102, 0, 0.2);
+    transform: translateY(-6px);
+  }
+
+  /* Certificates adjustments */
+  .row4.certificates {
+    flex-direction: column;
+    margin-top: 20px;
+    padding: 0 10px;
+  }
+
+  .row4 h2 {
+    font-size: 1.5rem;
+    margin-bottom: 25px;
+  }
+
+  .cert-gallery {
+    gap: 10px;
+  }
+
+  .cert {
+    width: 100%;
+    max-width: 280px;
+    border-radius: 8px;
+  }
+
+  .cert.expanded {
+    width: 95%;
+    max-width: none;
+    height: auto;
+    max-height: 80vh;
+    object-fit: contain;
+    border-radius: 12px;
+  }
+
+  #overlay.active {
+    display: block;
+    background: rgba(0,0,0,0.85);
+  }
+}
+
+.tag {
+  font-weight: bold;
+  padding: 5px 8px;
+  border-radius: 6px;
+  font-size: 1.0em;
+}
+
+.ux {
+  background-color: #ff6600;
+  color: white;
+}
+
+.appdev {
+  background-color: #ff0099;
+  color: white;
+}
+
+.d3 {
+  background-color: #ba8e23;
+  color: white;
+}
+
+.ai {
+  background-color: #138389;
+  color: white;
+}
+
+/* ================= Certificates Section ================= */
+.row4.certificates {
+  grid-column: span 4;
+  margin-top: 40px;
+}
+
+.row4 h2 {
+  font-size: 2rem;
+  font-weight: 700;
+  margin-bottom: 50px;
+  text-align: center;   /* <-- already there */
+  width: 100%;          /* make sure it spans full row */
+}
+
+
+/* Gallery container */
+.cert-gallery {
+  position: relative;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 15px;
+  justify-content: center;
+}
+
+/* Certificate images */
+.cert {
+  width: 200px;
+  height: auto;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 0.4s ease;
+  box-shadow: 0 6px 18px rgba(0,0,0,0.4);
+  transform: rotate(var(--rotation, 0deg));
+}
+
+/* Hover effect */
+.cert:hover {
+  transform: scale(1.05) rotate(var(--rotation, 0deg));
+  z-index: 5;
+}
+
+/* Expanded (magnified) certificate */
+.cert.expanded {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  width: 80%;
+  max-width: 900px;
+  z-index: 50;
+  transform: translate(-50%, -50%) scale(1.05) rotate(0deg);
+  box-shadow: 0 0 40px rgba(255,255,255,0.3);
+  border-radius: 20px;
+  transition: all 0.4s ease;
+}
+
+/* Dark overlay when expanded */
+#overlay {
+  display: none;
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,0.6);
+  z-index: 40;
+}
+
+#overlay.active {
+  display: block;
+}
+
+
+  </style>
+</head>
+<body>
+  <div class="bg-blobs">
+    <div class="blob"></div>
+    <div class="blob"></div>
+    <div class="blob"></div>
+  </div>
+  
+  <div class="overlay" id="overlay"></div>
+  
+  <!-- Project Detail Modal -->
+  <div class="project-modal" id="project-modal">
+    <div class="project-modal-header">
+      <h2 class="project-modal-title" id="project-modal-title"></h2>
+      <button class="project-modal-close" id="project-modal-close">✕</button>
+    </div>
+    <div class="project-modal-content" id="project-modal-content">
+      <!-- Content will be inserted via JavaScript -->
+    </div>
+  </div>
+  
+  <div class="container">
+    <div class="card navbar">
+      <div class="left">Faiq Sohail Khan</div>
+      <div class="right">
+        <a onclick="expandCard('about')">About</a>
+        <a onclick="expandCard('contact')">Contact</a>
+      </div>
+    </div>
+
+    <div class="card headline">
+  <div class="label">Who am I?</div>
+  <i data-lucide="pen-tool" class="icon"></i>
+  <div class="bottom-text">
+    Shaping Digital Experiences with 
+    <span class="highlight">UX Designing</span>, 
+    <span class="highlight">3D Modeling</span>, 
+    and <span class="highlight">Dev AI</span> 
+    that Connects
+  </div>
+</div>
+
+
+  <div class="card photo"></div>
+
+    <div class="card projects">
+       <h2>Projects</h2>
+       <p onclick="showProject('food-wheels')">Food Wheels - <span class="tag ux">UX</span></p><hr>
+       <p onclick="showProject('mcb-live')">MCB Live Redesign - <span class="tag ux">UX</span></p><hr>
+       <p onclick="showProject('moody')">Moody - <span class="tag appdev">App Dev</span></p><hr>
+       <p onclick="showProject('inbox-armor')">Inbox Armor - <span class="tag ai">AI</span></p><hr>
+       <p onclick="showProject('hellcat')">Hellcat Model & Animation - <span class="tag d3">3D</span></p><hr>	
+	<div class="project-collage" id="video-container">
+        <img id="video-thumbnail" src="" alt="Random Video">
+      </div>
+    </div>
+
+    <div class="row3">
+      <div class="card about" id="about">
+        <div class="label">About Me</div>
+        <div class="desc">I’m a Creative UX Designer & Video Editor with a passion for building intuitive digital experiences and impactful visual content. I started my career as a Video Editor at Marham.PK (2019–2024), where I developed strong storytelling and editing skills. In October 2023, I launched my own YouTube channel to further explore creative storytelling. In 2024, I worked as a UX Designer at StudyWise (Apr–Sep), focusing on user-centered designs that balance aesthetics with functionality. My combined experience in design and media enables me to create engaging, purposeful, and user-driven experiences across different platforms.</div>
+      </div>
+
+      <div class="card contact" id="contact">
+        <div class="label">Have a question??</div>
+        <div class="bottom">Contact Me</div>
+        <form action="https://formspree.io/f/meozyjgr" method="POST">
+          <input type="text" name="name" placeholder="Your Name" required>
+          <input type="email" name="email" placeholder="Your Email" required>
+          <textarea name="message" placeholder="Your Message" rows="4" required></textarea>
+          <button type="submit">Send</button>
+        </form>
+        <div class="socials">
+          <a href="https://www.linkedin.com/in/faiq-sohail-khan/" target="_blank">
+            <svg viewBox="0 0 24 24">
+              <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"></path>
+              <rect x="2" y="9" width="4" height="12"></rect>
+              <circle cx="4" cy="4" r="2"></circle>
+            </svg>
+          </a>
+          <a href="https://www.instagram.com/faiqsohail51" target="_blank">
+            <svg viewBox="0 0 24 24">
+              <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
+              <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path>
+              <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line>
+            </svg>
+          </a>
+          <a href="https://www.youtube.com/@faiqsohailkhan" target="_blank">
+            <svg viewBox="0 0 24 24">
+              <path d="M22.54 6.42a2.78 2.78 0 0 0-1.94-2C18.88 4 12 4 12 4s-6.88 0-8.6.46a2.78 2.78 0 0 0-1.94 2A29 29 0 0 0 1 12a29 29 0 0 0 .46 5.58 2.78 2.78 0 0 0 1.94 2c1.72.46 8.6.46 8.6.46s6.88 0 8.6-.46a2.78 2.78 0 0 0 1.94-2 29 29 0 0 0 .46-5.58 29 29 0 0 0-.46-5.58z"></path>
+              <polygon points="9.75 15.02 15.5 12 9.75 8.98 9.75 15.02"></polygon>
+            </svg>
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Certificates Row -->
+<div class="row4 certificates">
+  <h2>Achievements</h2>
+  <div class="cert-gallery">
+    <img src="cert1.png" alt="Certificate 1" class="cert">
+    <img src="cert2.png" alt="Certificate 2" class="cert">
+    <img src="cert3.png" alt="Certificate 3" class="cert">
+    <img src="cert4.png" alt="Certificate 4" class="cert">
+    <img src="cert5.png" alt="Certificate 5" class="cert">
+  </div>
+</div>
+
+<!-- Overlay for closing expanded view -->
+<div id="overlay"></div>
+
+  </div>
+
+  <script>
+
+    // Random rotation for scattered look
+document.querySelectorAll(".cert").forEach(cert => {
+  const angle = (Math.random() * 20 - 10).toFixed(1); // random angle between -10° and 10°
+  cert.style.setProperty("--rotation", `${angle}deg`);
+
+  cert.addEventListener("click", () => {
+    // If already expanded, close it
+    if (cert.classList.contains("expanded")) {
+      cert.classList.remove("expanded");
+      document.getElementById("overlay").classList.remove("active");
+    } else {
+      document.querySelectorAll(".cert").forEach(c => c.classList.remove("expanded"));
+      cert.classList.add("expanded");
+      document.getElementById("overlay").classList.add("active");
+    }
+  });
+});
+
+// Close expanded cert when overlay clicked
+document.getElementById("overlay").addEventListener("click", () => {
+  document.querySelectorAll(".cert").forEach(c => c.classList.remove("expanded"));
+  document.getElementById("overlay").classList.remove("active");
+});
+
+
+
+
+    lucide.createIcons();
+
+    // Project data
+    const projects = {
+      'food-wheels': {
+        title: 'Food Wheels - UX Design',
+        image: 'foodwheel/big pic v.png',
+        description: 'A food delivery app focused on connecting local food trucks with customers. Designed with an intuitive interface that makes ordering from mobile kitchens simple and enjoyable.',
+        features: [
+          'User-friendly interface for browsing food trucks',
+          'Flow for real-time order tracking',
+          'Secure payment screens (UI only)',
+          'Personalized recommendations section'
+        ],
+        tags: ['UX Design', 'Mobile App', 'Food Delivery'],
+        link: 'https://www.figma.com/proto/3MbFpyohGKwaSoO3pS39su/Food-Wheels?node-id=24-42&scaling=scale-down&page-id=0%3A1&starting-point-node-id=404%3A243&show-proto-sidebar=1'
+      },
+      'mcb-live': {
+        title: 'MCB Live Redesign - UX',
+        image: 'mcb/big pic v.png',
+        description: 'Redesigned the MCB Live banking app to improve user experience and increase engagement. Focused on simplifying navigation and making financial management more intuitive.',
+        features: [
+          'Streamlined account management',
+          'Simplified transaction flows',
+          'Personalized financial insights',
+          'Improved visual hierarchy'
+        ],
+        tags: ['UX Design', 'Banking', 'Mobile App'],
+        link: 'https://www.figma.com/proto/zwT2VFHPQ9mqxxH2mkbrQ4/MCB-Redesign?node-id=432-986&viewport=277%2C182%2C0.16&scaling=scale-down&starting-point-node-id=432%3A986'
+      },
+      'moody': {
+        title: 'Moody - App Development',
+        image: 'moody/big pic.png',
+        description: 'A mood tracking application that helps users monitor their emotional well-being over time. Provides insights and recommendations based on mood patterns.',
+        features: [
+          'Daily mood tracking with emoji-based input',
+          'Trend analysis and visualization',
+          'Personalized activity recommendations',
+          'Privacy-focused design'
+        ],
+        tags: ['App Development', 'Wellness', 'Android'],
+        link: 'moody/app-debug.apk'
+      },
+      'inbox-armor': {
+        title: 'Inbox Armor - AI',
+        image: 'inboxarmor/big pic.png',
+        description: 'An AI-powered email management system that automatically filters, categorizes, and prioritizes messages to help users focus on what matters most.',
+        features: [
+          'AI-based spam and priority filtering',
+          'Naïve Bayes | KNN Algorithm',
+		'Web based GUI'
+        ],
+        tags: ['AI', 'Email', 'Productivity'],
+        link: 'https://github.com/not-Faiq/InboxArmor-Email-Spam-Detector'
+      },
+      'hellcat': {
+        title: 'Hellcat Model & Animation - 3D',
+        image: '3d/big pic 2.png',
+        description: 'A detailed 3D model and animation of a Dodge Hellcat, created with attention to realistic textures, lighting, and motion.',
+        features: [
+          'High-polygon 3D modeling',
+          'PBR texturing for realistic materials',
+          'Rigging and animation',
+          'Realistic lighting setup',
+          'Rendering with Arnold renderer'
+        ],
+        tags: ['3D Modeling', 'Animation', 'Automotive'],
+        link: '3d/video.mp4'
+      }
+    };
+
+    function showProject(projectId) {
+      const project = projects[projectId];
+      if (!project) return;
+      
+      const modal = document.getElementById('project-modal');
+      const title = document.getElementById('project-modal-title');
+      const content = document.getElementById('project-modal-content');
+      const overlay = document.getElementById('overlay');
+      
+      // Set title
+      title.textContent = project.title;
+      
+      // Build content
+      content.innerHTML = `
+        <div class="project-modal-image">
+          <img src="${project.image}" alt="${project.title}">
+        </div>
+        <div class="project-modal-details">
+          <p class="project-modal-description">${project.description}</p>
+          <h3>Features</h3>
+          <ul class="project-modal-features">
+            ${project.features.map(feature => `<li>${feature}</li>`).join('')}
+          </ul>
+          <div class="project-modal-tags">
+            ${project.tags.map(tag => `<span class="tag">${tag}</span>`).join('')}
+          </div>
+          <a href="${project.link}" class="project-modal-link" target="_blank">View Project</a>
+        </div>
+      `;
+      
+      // Show modal and overlay
+      modal.classList.add('active');
+      overlay.classList.add('active');
+    }
+
+    function closeProjectModal() {
+      const modal = document.getElementById('project-modal');
+      const overlay = document.getElementById('overlay');
+      
+      modal.classList.remove('active');
+      overlay.classList.remove('active');
+    }
+
+    // Set up event listeners
+    document.getElementById('project-modal-close').addEventListener('click', closeProjectModal);
+    document.getElementById('overlay').addEventListener('click', closeProjectModal);
+
+    function expandCard(id) {
+      const card = document.getElementById(id);
+      const overlay = document.getElementById("overlay");
+      document.querySelectorAll(".card.expanded").forEach(c => c.classList.remove("expanded"));
+      card.classList.add("expanded");
+      overlay.classList.add("active");
+    }
+    function closeExpanded() {
+      document.querySelectorAll(".card.expanded").forEach(c => c.classList.remove("expanded"));
+      document.getElementById("overlay").classList.remove("active");
+    }
+    document.getElementById("overlay").addEventListener("click", closeExpanded);
+    document.addEventListener("click", function(e) {
+      const expanded = document.querySelector(".card.expanded");
+      if (expanded && !expanded.contains(e.target) && !e.target.closest(".navbar .right a")) {
+        closeExpanded();
+      }
+    });
+
+window.addEventListener("load", () => {
+  const photo = document.querySelector(".card.photo");
+  const cards = [...document.querySelectorAll(".card:not(.photo)")];
+
+  // Step 1: Photo zoom
+  photo.style.animation = "zoomIn 1s ease forwards";
+
+  // Step 2: Ripple after zoom
+  setTimeout(() => {
+    photo.classList.add("ripple-active");
+  }, 1000);
+
+  // Step 3: Show other cards randomly
+  setTimeout(() => {
+    cards.forEach((card) => {
+      setTimeout(() => {
+        card.style.animation = "fadeUp 0.8s ease forwards";
+      }, Math.random() * 1000);
+    });
+  }, 1600);
+});
+
+const videoIds = [
+  "5fO3umCgaM0",
+  "-DLL_R0YXV8",
+  "y7xmwYA9gmw",
+"okjSGcAEWIc",
+"iLsc0qMBMXI",
+"ovtlG6vT6fw",
+"4woS7YPaseU",
+"mBtErky8wC4"
+];
+
+    function loadRandomVideo() {
+      const randomId = videoIds[Math.floor(Math.random() * videoIds.length)];
+      const thumbnail = `https://img.youtube.com/vi/${randomId}/maxresdefault.jpg`;
+      
+      const thumbEl = document.getElementById("video-thumbnail");
+      thumbEl.src = thumbnail;
+
+      // On click → replace with video player
+      thumbEl.onclick = () => {
+        document.getElementById("video-container").innerHTML = `
+          <iframe width="100%" height="400" 
+            src="https://www.youtube.com/embed/${randomId}?autoplay=1" 
+            frameborder="0" allow="autoplay; encrypted-media" allowfullscreen>
+          </iframe>`;
+      };
+    }
+
+    window.addEventListener("load", loadRandomVideo);
+	setInterval(loadRandomVideo, 5000);
+
+	  // When opening modal
+document.body.classList.add("modal-open");
+
+// When closing modal
+document.body.classList.remove("modal-open");
+
+  </script>
+</body>
+</html>
