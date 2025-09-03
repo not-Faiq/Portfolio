@@ -581,8 +581,11 @@ body.modal-open {
     border-radius: 15px;
     overflow-y: auto; 
     -webkit-overflow-scrolling: touch;
-text-align: left; /* force text to align left */
-	  align-items: flex-start;
+	  align-items: stretch;   /* make children take full width */
+    text-align: left !important; /* force override */
+  }
+	.project-modal * {
+    text-align: left !important; /* override any child centering */
   }
 
   .project-modal-header {
