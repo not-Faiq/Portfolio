@@ -432,6 +432,7 @@ max-height: 1000px;   /* adjust to your layout */
 body.modal-open {
   overflow: hidden;
 }
+
 .project-modal {
   position: fixed;
   top: 50%;
@@ -444,7 +445,7 @@ body.modal-open {
   backdrop-filter: blur(20px);
   border-radius: 25px;
   padding: 30px;
-  z-index: 30;
+  z-index: 1001; /* ✅ ensure modal above overlay */
   opacity: 0;
   pointer-events: none;
   transition: all 0.4s ease;
@@ -559,13 +560,16 @@ body.modal-open {
   font-weight: 600;
   transition: all 0.3s ease;
   margin-top: 10px;
-z-index: 100;
+  position: relative; /* ✅ enables z-index */
+  z-index: 1002; /* ✅ keeps button above everything */
+  cursor: pointer;
 }
 
 .project-modal-link:hover {
   transform: translateY(-3px);
   box-shadow: 0 5px 15px rgba(255, 102, 0, 0.4);
 }
+
 
 /* Mobile adjustments */
 @media (max-width: 768px) {
